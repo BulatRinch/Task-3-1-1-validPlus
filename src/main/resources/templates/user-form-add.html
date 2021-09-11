@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" th:with="lang=${#locale.language}" th:lang="${lang}">
+
+<head th:replace="layouts/main :: htmlhead"/>
+<body>
+
+<nav th:replace="layouts/main :: navigation" />
+
+<div class="container">
+    <div class="row">
+        <div class="col text-center">
+            <p class="lead">Добавить пользователя</p>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <form th:method="POST" th:action="@{/admin/add}" th:object="${user}">
+        <input type="hidden" th:field="*{id}" th:value="*{getId()}">
+        <div class="form-row">
+            <div class="col-md-6 mb-3">
+                <label for="name">Имя</label>
+                <input type="text" class="form-control" th:classappend="${#fields.hasErrors('firstName')} ? 'is-invalid'" id="name" th:field="*{firstName}" th:value="*{getFirstName()}" placeholder="Введите Ваше имя">
+                <div th:if="${#fields.hasErrors('firstName')}" class="invalid-feedback" th:errors="*{firstName}"/>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="last_name">Фамилия</label>
+                <input type="text" class="form-control" id="last_name" th:field="*{lastName}" th:value="*{getLastName()}" placeholder="Введите фамилию">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col-md-6 mb-3">
+                <label for="email">Эл. почта</label>
+                <input type="text" class="form-control" th:classappend="${#fields.hasErrors('email')} ? 'is-invalid'" id="email" th:field="*{email}" th:value="*{getEmail()}" placeholder="Введите эл. почту">
+                <div th:if="${#fields.hasErrors('email')}" class="invalid-feedback" th:errors="*{email}"/>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="password">Пароль</label>
+                <input type="password" class="form-control" th:classappend="${#fields.hasErrors('password')} ? 'is-invalid'" id="password" th:field="*{password}" th:value="*{getPassword()}" placeholder="Введите пароль">
+                <div th:if="${#fields.hasErrors('password')}" class="invalid-feedback" th:errors="*{password}"/>
+            </div>
+        </div>
+        <div class="form-row mb-3">
+            <div class="col-md-6 mb-3">
+                <label for="roles">Роли</label>
+                <div id="roles">
+                    <div class="form-check form-check-inline" th:each="role : ${allRoles}">
+                        <input type="checkbox" class="form-check-input" name="roles" th:checked="${user.hasRole('__${role.name}__')}" th:id="${role.name}" th:value="${role.id}">
+                        <label class="form-check-label" th:for="${role.name}" th:text="${role.name}"/>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="enabled-row">&nbsp;</label>
+                <div id="enabled-row">
+                    <div class="form-check form-check-inline">
+                        <input type="checkbox" class="form-check-input" name="roles" th:checked="*{isEnabled()}" id="enabled" th:field="*{enabled}">
+                        <label class="form-check-label" for="enabled">Активный</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex justify-content-start align-items-center form-row">
+            <div class="mr-3">
+                <button class="btn btn-secondary" type="submit" th:text="Создать"/>
+                <a class="btn btn-light border-dark" href="/admin">Выйти</a>
+            </div>
+            <div>
+                <div th:if="${persistenceException}" class="alert alert-danger mb-0" role="alert">
+                    Пользователь с эл. почтой <span th:text="*{getEmail()}"/> уже существует!
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div th:replace="layouts/main :: footer"></div>
+</body>
+</html>

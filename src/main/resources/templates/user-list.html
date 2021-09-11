@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" th:with="lang=${#locale.language}" th:lang="${lang}">
+
+<head th:replace="layouts/main :: htmlhead"/>
+<body>
+
+<nav th:replace="layouts/main :: navigation" />
+
+<div class="container">
+    <div class="row">
+        <div class="col text-center">
+            <p class="lead">Список пользователей</p>
+        </div>
+    </div>
+</div>
+
+
+<div class="container">
+    <div class="row p-3 mb-2 bg-dark text-white font-weight-bold">
+        <div class="col">Имя Фамилия</div>
+        <div class="col">Электронная почта</div>
+        <div class="col text-center">Активный</div>
+        <div class="col text-center">Роли</div>
+        <div class="col text-center">Операции</div>
+    </div>
+
+    <div th:each="user,rowStat : ${users}" class="d-flex align-items-center row p-2 mb-2" th:classappend="${rowStat.count % 2 != 0 ? 'bg-light text-dark' : 'bg-secondary text-white'}">
+        <div class="col font-weight-bold" th:text="${user.getFullName()}"/>
+        <div class="col" th:text="${user.email}"/>
+        <div class="col text-center" th:text="${user.enabled}"/>
+        <div class="col text-center">
+            <th:block th:each="role : ${user.roles}">
+                &nbsp;<span th:text="${role.name}"/>
+            </th:block>
+        </div>
+        <div class="col text-center">
+            <a type="button" th:href="@{/admin/{id}/edit(id=${user.id})}" class="btn btn-secondary" th:classappend="${rowStat.count % 2 == 0 ? 'bg-light text-dark' : 'bg-secondary text-white'}">Изменить</a>
+            <a type="button" th:href="@{/admin/{id}/delete(id=${user.id})}" class="btn btn-secondary" th:classappend="${rowStat.count % 2 == 0 ? 'bg-light text-dark' : 'bg-secondary text-white'}">Удалить</a>
+        </div>
+    </div>
+</div>
+
+<!--<div th:replace="layouts/main :: footer"></div>-->
+</body>
+</html>

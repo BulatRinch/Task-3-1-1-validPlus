@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" th:with="lang=${#locale.language}" th:lang="${lang}">
+
+<head th:replace="layouts/main :: htmlhead"/>
+<body>
+
+<nav th:replace="layouts/main :: navigation" />
+
+<div class="container pt-4" th:object="${user}">
+    <div class="row d-flex justify-content-center">
+        <div class="col-auto">
+            <div class="jumbotron">
+                <p class="display-4">Информация о пользователе</p>
+                <hr class="my-4">
+                <p><b>Имя фамилия: </b><span th:text="*{getFullName()}"/></p>
+                <p><b>Ваша эл. почта: </b><span th:text="*{email}"/></p>
+                <p>
+                    <b>и роли</b>
+                    <th:block th:each="role : *{getRoles()}">
+                        &nbsp;<span th:text="${role.name}"/>
+                    </th:block>
+                </p>
+                <p><b>Активный: </b><span th:text="*{enabled}"/></p>
+                <p><a type="button" th:href="@{/logout}" class="btn btn-secondary bg-secondary text-white">Выйти</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="layouts/main :: footer"></div>
+</body>
+</html>
