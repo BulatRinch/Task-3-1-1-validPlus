@@ -11,6 +11,8 @@ public interface UserService extends UserDetailsService {
 
     User find(Long userId) throws NullPointerException;
 
+    boolean update(User user);
+
     void delete(Long userId);
 
     boolean save(User user);

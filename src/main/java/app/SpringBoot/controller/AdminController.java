@@ -3,6 +3,7 @@ package app.SpringBoot.controller;
 import app.SpringBoot.model.User;
 import app.SpringBoot.service.RoleService;
 import app.SpringBoot.service.UserService;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.hibernate.AssertionFailure;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -10,14 +11,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.UnexpectedRollbackException;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.thymeleaf.util.StringUtils;
+
 import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
-
+private String oldPassword=null;
     private final UserService userService;
     private final RoleService roleService;
+
 
     @Autowired
     public AdminController(UserService userService, RoleService roleService) {
@@ -40,6 +44,7 @@ public class AdminController {
     @GetMapping("/{id}/edit")
     public String editUserForm(@PathVariable(value = "id", required = true) Long userId, Model model) {
         try {
+            oldPassword = userService.find(userId).getPassword();
             model.addAttribute("user", userService.find(userId));
         } catch (EmptyResultDataAccessException e) {
             e.printStackTrace();
@@ -49,7 +54,7 @@ public class AdminController {
         return "user-form";
     }
 
-    @PostMapping()
+    @PostMapping("/add")
     public String saveUser(@Valid @ModelAttribute("user") User user) {
         try {
             return userService.save(user) ? "redirect:/admin" : "user-form";
@@ -58,16 +63,19 @@ public class AdminController {
         }
     }
 
-    @PostMapping("/add")
+    @PutMapping()
     public String updateUser(@Valid @ModelAttribute("user") User user) {
         try {
-            return userService.save(user) ? "redirect:/admin" : "user-form";
+            if (StringUtils.isEmpty(user.getPassword())) {
+                user.setPassword(oldPassword);
+            }
+            return userService.update(user) ? "redirect:/admin" : "user-form";
         } catch (AssertionFailure | UnexpectedRollbackException e) {
             return "user-form";
         }
     }
 
-    @GetMapping("/{id}/delete")
+    @DeleteMapping("/{id}/delete")
     public String deleteUser(@PathVariable("id") Long userId) {
         userService.delete(userId);
 

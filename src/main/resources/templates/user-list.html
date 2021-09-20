@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" th:with="lang=${#locale.language}" th:lang="${lang}">
+<html xmlns:th="http://www.thymeleaf.org" th:with="lang=${#locale.language}" th:lang="${lang}">
 
 <head th:replace="layouts/main :: htmlhead"/>
 <body>
 
-<nav th:replace="layouts/main :: navigation" />
+<nav th:replace="layouts/main :: navigation"/>
 
 <div class="container">
     <div class="row">
@@ -24,7 +24,8 @@
         <div class="col text-center">Операции</div>
     </div>
 
-    <div th:each="user,rowStat : ${users}" class="d-flex align-items-center row p-2 mb-2" th:classappend="${rowStat.count % 2 != 0 ? 'bg-light text-dark' : 'bg-secondary text-white'}">
+    <div th:each="user,rowStat : ${users}" class="d-flex align-items-center row p-2 mb-2"
+         th:classappend="${rowStat.count % 2 != 0 ? 'bg-light text-dark' : 'bg-secondary text-white'}">
         <div class="col font-weight-bold" th:text="${user.getFullName()}"/>
         <div class="col" th:text="${user.email}"/>
         <div class="col text-center" th:text="${user.enabled}"/>
@@ -34,8 +35,15 @@
             </th:block>
         </div>
         <div class="col text-center">
-            <a type="button" th:href="@{/admin/{id}/edit(id=${user.id})}" class="btn btn-secondary" th:classappend="${rowStat.count % 2 == 0 ? 'bg-light text-dark' : 'bg-secondary text-white'}">Изменить</a>
-            <a type="button" th:href="@{/admin/{id}/delete(id=${user.id})}" class="btn btn-secondary" th:classappend="${rowStat.count % 2 == 0 ? 'bg-light text-dark' : 'bg-secondary text-white'}">Удалить</a>
+            <a type="button" th:href="@{/admin/{id}/edit(id=${user.id})}" class="btn btn-secondary"
+               th:classappend="${rowStat.count % 2 == 0 ? 'bg-light text-dark' : 'bg-secondary text-white'}">Изменить</a>
+            <form th:method="POST" th:action="@{/admin/{id}/delete(id=${user.id})}">
+                <input id="method" type="hidden" name="_method" value="delete">
+                <button class="btn btn-secondary" type="submit" th:text="Удалить"
+                        th:classappend="${rowStat.count % 2 == 0 ? 'bg-light text-dark' : 'bg-secondary text-white'}"/>
+            </form>
+
+
         </div>
     </div>
 </div>

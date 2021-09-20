@@ -46,20 +46,27 @@ public class UserServiceImpl implements  UserService{
 
     @Override
     public boolean save(User user) {
-
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-
         try {
             userRepository.save(user);
         } catch (PersistenceException e) {
             e.printStackTrace();
             return false;
         }
-
         return true;
     }
 
-
+    @Override
+    public boolean update(User user) {
+       // user.setPassword(passwordEncoder.encode(user.getPassword()));
+        try {
+            userRepository.save(user);
+        } catch (PersistenceException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
 
     @Override
     public void delete(Long userId) {
