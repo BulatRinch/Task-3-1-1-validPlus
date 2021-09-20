@@ -21,7 +21,7 @@
             <div class="col-md-6 mb-3">
                 <label for="name">Имя</label>
                 <input type="text" class="form-control" th:classappend="${#fields.hasErrors('firstName')} ? 'is-invalid'" id="name" th:field="*{firstName}" th:value="*{getFirstName()}" placeholder="Введите Ваше имя">
-                <div th:if="${#fields.hasErrors('firstName')}" class="invalid-feedback" th:errors="*{firstName}"/>
+
             </div>
             <div class="col-md-6 mb-3">
                 <label for="last_name">Фамилия</label>
@@ -32,12 +32,12 @@
             <div class="col-md-6 mb-3">
                 <label for="email">Эл. почта</label>
                 <input type="text" class="form-control" th:classappend="${#fields.hasErrors('email')} ? 'is-invalid'" id="email" th:field="*{email}" th:value="*{getEmail()}" placeholder="Введите эл. почту">
-                <div th:if="${#fields.hasErrors('email')}" class="invalid-feedback" th:errors="*{email}"/>
+
             </div>
             <div class="col-md-6 mb-3">
                 <label for="password">Пароль</label>
                 <input type="password" class="form-control" th:classappend="${#fields.hasErrors('password')} ? 'is-invalid'" id="password" th:field="*{password}" th:value="*{getPassword()}" placeholder="Введите пароль">
-                <div th:if="${#fields.hasErrors('password')}" class="invalid-feedback" th:errors="*{password}"/>
+
             </div>
         </div>
         <div class="form-row mb-3">
@@ -65,15 +65,11 @@
                 <button class="btn btn-secondary" type="submit" th:text="Создать"/>
                 <a class="btn btn-light border-dark" href="/admin">Выйти</a>
             </div>
-            <div>
-                <div th:if="${persistenceException}" class="alert alert-danger mb-0" role="alert">
-                    Пользователь с эл. почтой <span th:text="*{getEmail()}"/> уже существует!
-                </div>
-            </div>
+
         </div>
     </form>
 </div>
 
-<div th:replace="layouts/main :: footer"></div>
+
 </body>
 </html>

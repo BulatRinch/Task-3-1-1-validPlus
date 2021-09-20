@@ -1,7 +1,7 @@
 #debug: true
 
 server:
-  port: 8085
+  port: 8080
   error:
     include-message: always
 
@@ -10,7 +10,7 @@ spring:
     name: JM Spring Boot
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/spring_security?verifyServerCertificate=false&useSSL=false&requireSSL=false&serverTimezone=Europe/Moscow&useLegacyDatetimeCode=false
+    url: jdbc:mysql://localhost:3306/springboot?verifyServerCertificate=false&useSSL=false&requireSSL=false&serverTimezone=Europe/Moscow&useLegacyDatetimeCode=false
     username: root
     password: root
   jpa:

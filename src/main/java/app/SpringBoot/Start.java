@@ -2,25 +2,21 @@ package app.SpringBoot;
 
 import app.SpringBoot.model.Role;
 import app.SpringBoot.model.User;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Repository;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.transaction.Transactional;
+import app.SpringBoot.service.RoleService;
+import app.SpringBoot.service.UserService;
+import org.springframework.stereotype.Component;
 import java.util.HashSet;
 
-@Repository
-@Transactional
+@Component
 public class Start {
 
-    private final PasswordEncoder passwordEncoder;
+    private final RoleService roleService;
 
-    @PersistenceContext
-    private EntityManager entityManager;
+    private final UserService userService;
 
-    public Start(PasswordEncoder passwordEncoder) {
-        this.passwordEncoder = passwordEncoder;
+    public Start(RoleService roleService, UserService userService) {
+        this.roleService = roleService;
+        this.userService = userService;
     }
 
 
@@ -29,12 +25,12 @@ public class Start {
         roleAdmin.setName("ROLE_ADMIN");
         Role roleUser = new Role();
         roleUser.setName("ROLE_USER");
-        entityManager.persist(roleUser);
-        entityManager.persist(roleAdmin);
+        roleService.save(roleUser);
+        roleService.save(roleAdmin);
 
 
         User user = new User();
-        user.setPassword(passwordEncoder.encode("admin"));
+        user.setPassword("admin");
         user.setEmail("admin");
         user.setEnabled(true);
         user.setFirstName("Александр");
@@ -44,10 +40,10 @@ public class Start {
         role.add(roleUser);
 
         user.setRoles(role);
-        entityManager.persist(user);
+        userService.save(user);
 
         User user2 = new User();
-        user2.setPassword(passwordEncoder.encode("user"));
+        user2.setPassword("user");
         user2.setEmail("user");
         user2.setEnabled(true);
         user2.setFirstName("Игорь");
@@ -56,7 +52,7 @@ public class Start {
         role2.add(roleUser);
 
         user2.setRoles(role2);
-        entityManager.persist(user2);
+        userService.save(user2);
 
     }
 

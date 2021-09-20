@@ -1,6 +1,4 @@
 package app.SpringBoot;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -15,12 +13,7 @@ public class SpringBootSecurityUsersApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(SpringBootSecurityUsersApplication.class, args);
 
-		boolean check = true;
-		if (check) {
 			start.save();
-			check=false;
-		}
-
 
 	}
 
