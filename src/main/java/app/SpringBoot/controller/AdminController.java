@@ -10,6 +10,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.UnexpectedRollbackException;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.thymeleaf.util.StringUtils;
 
@@ -55,11 +56,16 @@ private String oldPassword=null;
     }
 
     @PostMapping("/add")
-    public String saveUser(@Valid @ModelAttribute("user") User user) {
+    public String saveUser(@Valid @ModelAttribute("user") User user, Model model) {
+        model.addAttribute("allRoles", roleService.findAllRoles());
+        if (StringUtils.isEmpty(user.getPassword())||StringUtils.isEmpty(user.getEmail())) {
+            model.addAttribute("error", "Поля эл. почты и пароля не должны быть ПУСТЫМИ!");
+            return "user-form-add";
+        }
         try {
-            return userService.save(user) ? "redirect:/admin" : "user-form";
+            return userService.save(user) ? "redirect:/admin" : "user-form-add";
         } catch (AssertionFailure | UnexpectedRollbackException e) {
-            return "user-form";
+            return "user-form-add";
         }
     }
 
