@@ -70,12 +70,20 @@ private String oldPassword=null;
     }
 
     @PutMapping()
-    public String updateUser(@Valid @ModelAttribute("user") User user) {
+    public String updateUser(@Valid @ModelAttribute("user") User user, Model model) {
         try {
-            if (StringUtils.isEmpty(user.getPassword())) {
-                user.setPassword(oldPassword);
+
+            if (StringUtils.isEmpty(user.getEmail())) {
+                model.addAttribute("error", "Поле эл. почты не должно быть ПУСТЫМ!");
+                return "user-form";
+            } else {
+                if (StringUtils.isEmpty(user.getPassword())) {
+                    user.setPassword(oldPassword);
+                    return userService.update(user) ? "redirect:/admin" : "user-form";
+                } else {
+                    return userService.save(user)? "redirect:/admin" : "user-form";
+                }
             }
-            return userService.update(user) ? "redirect:/admin" : "user-form";
         } catch (AssertionFailure | UnexpectedRollbackException e) {
             return "user-form";
         }
